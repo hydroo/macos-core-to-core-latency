@@ -19,6 +19,27 @@ python3 ../macos-core-to-core-latency.py results.log
 deactivate
 ```
 
+# Tuning
+
+The benchmark is sensitive to CPU core frequencies.
+Therefore, connect your device to power avoid power throttling.
+As for thermal throttling (e.g. on fanless systems like the Macbook Air), there aren't many options: External cooling, tuning for overall shorter runs.
+
+You can change the following variables in main.cpp.
+This can help in case the runs don't finish or take too long.
+
+```
+constexpr int iterationsPerExperiment  = 2000; // could be lowered to 1000
+// dummyWorkloadLoopLength runs on idle threads to make sure all threads are scheduled concurrently
+constexpr int dummyWorkloadLoopLength  = iterationsPerExperiment*1024; // empirical
+          int targetExperiments        = 300;  // -r argument // can be lowered further
+constexpr bool optionWarmup            = true;
+constexpr bool optionEstimateFrequency = true;
+```
+
+`macos-core-to-core-latency.py` has the `-v` option to print out more statistics about the measurement.
+Alternatively you can look at the logs directly.
+
 # Results
 
 ## Apple M4 Pro (12C)
