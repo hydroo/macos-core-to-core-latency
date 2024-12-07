@@ -188,6 +188,7 @@ void f(std::size_t threadId, Experiments& experiments, Cores& cores) {
                 experimentsNotStarted += 1;
                 if (experimentsNotStarted % 1000 == 0) { std::println(std::cerr, "# Debug: Not both {} and {} found ({}). Repeat.", e.fromCoreIndex, e.toCoreIndex, experimentsNotStarted); }
             }
+            dummyWorkload(256); // empirical
             continue;
         } else {
             if (threadId == 0) {
