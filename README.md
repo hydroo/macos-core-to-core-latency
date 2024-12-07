@@ -22,7 +22,7 @@ deactivate
 # Tuning
 
 The benchmark is sensitive to CPU core frequencies.
-Therefore, connect your device to power avoid power throttling.
+Therefore, connect your device to power to avoid power throttling.
 As for thermal throttling (e.g. on fanless systems like the Macbook Air), there aren't many options: External cooling, tuning for overall shorter runs.
 
 You can change the following variables in main.cpp.
