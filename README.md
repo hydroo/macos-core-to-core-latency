@@ -48,6 +48,12 @@ Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M4 Max (16C) Core-to-Core Latency](results/241208-1-m4max-steady_clock-i-2000-r-300.png?raw=true "Apple M4 Max (16C) Core-to-Core Latency")
 
+## Apple M3 Max (16C)
+
+Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
+
+![Apple M2 Pro (10C) Core-to-Core Latency](results/241212-0-m3max.png?raw=true "Apple M3 Max (16C) Core-to-Core Latency")
+
 ## Apple M4 Pro (12C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
