@@ -279,7 +279,7 @@ void f(std::size_t threadId, Experiments& experiments, Cores& cores) {
                         auto nanoSeconds = std::chrono::duration<double, std::nano>(endTime - startTime).count();
                         auto nanoSecondsPerIteration = nanoSeconds / iterationsPerExperiment / divideByTwoBecausePingPong;
                         e.validResults += 1;
-                        std::println("  {:2}, {:2},    {:4}, {:4},    {:6.2f} ns, {:6.2f}, {:6.2f},    {:.2f} GHz, {:.2f}, {:.2f},    {:.2f}, {:.2f}, {:.2f}",
+                        std::println("  {:2}, {:2},    {:5}, {:5},    {:6.2f} ns, {:6.2f}, {:6.2f},    {:.2f} GHz, {:.2f}, {:.2f},    {:.2f}, {:.2f}, {:.2f}",
                             e.fromCoreIndex,
                             e.toCoreIndex,
                             fromCore,
