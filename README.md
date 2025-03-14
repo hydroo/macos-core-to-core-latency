@@ -48,17 +48,24 @@ Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M4 Max (16C) Core-to-Core Latency](results/241208-1-m4max-steady_clock-i-2000-r-300.png?raw=true "Apple M4 Max (16C) Core-to-Core Latency")
 
+## Apple M4 Pro (12C)
+
+Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
+
+![Apple M4 Pro (12C) Core-to-Core Latency](results/241204-0-m4pro-cntvct_el0-i-2000-r-300.png?raw=true "Apple M2 Pro (12C) Core-to-Core Latency")
+
 ## Apple M3 Max (16C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M2 Pro (10C) Core-to-Core Latency](results/241212-0-m3max.png?raw=true "Apple M3 Max (16C) Core-to-Core Latency")
 
-## Apple M4 Pro (12C)
+## Apple M2 Ultra (24C) (Preliminary)
 
-Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
+The measurement in PR #3 [took almost a day](https://x.com/ivanfioravanti/status/1866945123973468526), and is not very stable.
+Most likely the ~minimum of each cluster is the true latency of the whole cluster.
 
-![Apple M4 Pro (12C) Core-to-Core Latency](results/241204-0-m4pro-cntvct_el0-i-2000-r-300.png?raw=true "Apple M2 Pro (12C) Core-to-Core Latency")
+![Apple M2 Ultra (24C) Core-to-Core Latency](results/241211-1-m2ultra-steady_clock-i-2000-r-300.png?raw=true "Apple M2 Ultra (24C) Core-to-Core Latency")
 
 ## Apple M2 Pro (10C)
 
