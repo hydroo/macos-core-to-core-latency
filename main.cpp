@@ -349,6 +349,8 @@ int main(int argc, char **args) {
 
     Experiments experiments(totalCores);
 
+    auto startTime = std::chrono::steady_clock::now();
+
     std::vector<std::thread> threads;
     for (std::size_t t = 0; t < totalCores; t += 1) {
         threads.emplace_back(std::thread(f, t, std::ref(experiments), std::ref(cores)));
@@ -357,6 +359,12 @@ int main(int argc, char **args) {
     for (auto && t : threads) {
         t.join();
     }
+
+    auto endTime = std::chrono::steady_clock::now();
+
+    auto totalTimeSeconds  = std::chrono::duration<double>(endTime - startTime).count();
+
+    std::println("# Info: Total time: {:.2f} s", totalTimeSeconds);
 
     return 0;
 }
