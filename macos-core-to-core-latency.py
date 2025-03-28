@@ -25,16 +25,19 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('logFile')
-    parser.add_argument('-v', '--verbose', action='store_true')
+    parser.add_argument('-v', '--verbose'  , action='store_true')
+    parser.add_argument('-n', '--cpu-name' , help='cpu name override')
+    parser.add_argument('-c', '--cpu-cores', help='cpu core count override')
     args = parser.parse_args()
 
     plotFilename = os.path.splitext(args.logFile)[0]+'.png'
 
-    cpuName, coreCount = cpuNameAndCoreCount()
-    #cpuName = "Apple M2 Pro" # override cpu name in case you run this on a different box
-    #coreCount = "10"
+    cpuName, cpuCores = cpuNameAndCoreCount()
+    if args.cpu_name:
+        cpuName = args.cpu_name
+        cpuCores = args.cpu_cores
     if cpuName:
-        if coreCount: cpuString = f'{cpuName} ({coreCount}C)'
+        if cpuCores: cpuString = f'{cpuName} ({cpuCores}C)'
         else        : cpuString = f'{cpuName}'
         print('CPU:', cpuString)
     else:
