@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     df0 = pd.read_csv(
         args.logFile,
-        names = ['fromIndex', 'toIndex', 'fromCore', 'toCore', 'fromCoreLatencyNs', 'toCoreLatencyNs', 'coreLatencyDeltaNs', 'fromCoreFrequencyBeforeGhz', 'fromCoreFrequencyAfterGhz', 'fromCoreFrequencyDeltaGhz', 'toCoreFrequencyBeforeGhz', 'toCoreFrequencyAfterGhz', 'toCoreFrequencyDeltaGhz'],
+        names = ['fromIndex', 'toIndex', 'fromCore', 'toCore', 'fromCoreLatencyNs', 'toCoreLatencyNs', 'fromCoreFrequencyBeforeGhz', 'fromCoreFrequencyAfterGhz', 'toCoreFrequencyBeforeGhz', 'toCoreFrequencyAfterGhz'],
         converters={
             'fromCore'                   : lambda x: "{:5}".format(int(x)),
             'toCore'                     : lambda x: "{:5}".format(int(x)),
