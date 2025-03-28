@@ -17,3 +17,6 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-DNDEBUG -g -O3 -march=native -mtune=native 
 
 add_executable(macos-core-to-core-latency)
 target_sources(macos-core-to-core-latency PRIVATE main.cpp)
+
+configure_file(macos-core-to-core-latency.py macos-core-to-core-latency.py COPYONLY)
+configure_file(requirements.txt requirements.txt COPYONLY)
