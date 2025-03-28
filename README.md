@@ -30,7 +30,7 @@ This can help in case the runs don't finish or take too long.
 ```
 constexpr int iterationsPerExperiment  = 2000; // could be lowered to 1000
 // dummyWorkloadLoopLength runs on idle threads to make sure all threads are scheduled concurrently
-constexpr int dummyWorkloadLoopLength  = iterationsPerExperiment*1024; // empirical
+constexpr int dummyWorkloadLoopLength  = iterationsPerExperiment*1024; // empirical - Try raising by 2-4x on M Ultra, because it currently only roughly covers an experiment at 100ns core-to-core latency
           int targetExperiments        = 300;  // -r argument // can be lowered further
 constexpr bool optionWarmup            = true;
 constexpr bool optionEstimateFrequency = true;

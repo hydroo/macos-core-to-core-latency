@@ -40,7 +40,7 @@ constexpr bool optionEstimateFrequency = true;
 
 constexpr int warmupIterationsPerExperiment = optionWarmup ? 10 : 0;
 constexpr int iterationsPerExperiment       = 2000;
-constexpr int dummyWorkloadLoopLength       = iterationsPerExperiment*1024; // empirical
+constexpr int dummyWorkloadLoopLength       = iterationsPerExperiment*1024; // empirical - Try raising by 2-4x on M Ultra, because it currently only roughly covers an experiment at 100ns core-to-core latency
 constexpr int divideByTwoBecausePingPong    = 2;
 int targetExperiments                       = 300;
 constexpr int validExperimentStreakMax      = 10;
@@ -344,6 +344,20 @@ int main(int argc, char **args) {
     std::println("# Info: Clock: {}"                     , CLOCK_NAME);
     std::println("# Info: Clock period: {:.0f}ns"        , CLOCK_PERIOD_NS);
     std::println("# Info: Clock query overhead: {:.0f}ns", clockOverhead());
+
+
+    constexpr int dummyWorkloadBenchmarkIterations = 30;
+    double dummyWorkloadBenchmarkNanoSeconds = std::numeric_limits<double>::max();
+    for (int i = 0; i < dummyWorkloadBenchmarkIterations; ++i) {
+        auto dummyWorkloadBenchmarkStartTime = CLOCK_NOW;
+        dummyWorkload(dummyWorkloadLoopLength);
+        auto dummyWorkloadBenchmarkEndTime = CLOCK_NOW;
+        auto dummyWorkloadBenchmarkNanoSeconds_ = std::chrono::duration<double, std::nano>(dummyWorkloadBenchmarkEndTime - dummyWorkloadBenchmarkStartTime).count();
+        dummyWorkloadBenchmarkNanoSeconds = std::min(dummyWorkloadBenchmarkNanoSeconds, dummyWorkloadBenchmarkNanoSeconds_);
+    }
+    std::println("# Info: Dummy workload duration: {:.0f}ns", dummyWorkloadBenchmarkNanoSeconds);
+    std::println("# Info: Dummy workload latency equivalent: {:.0f}ns", dummyWorkloadBenchmarkNanoSeconds / iterationsPerExperiment / divideByTwoBecausePingPong);
+
 
     Experiments experiments(totalCores);
 
