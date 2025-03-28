@@ -340,11 +340,12 @@ int main(int argc, char **args) {
         }
     }
 
-    std::println("# Info: Iterations per experiment: {}", iterationsPerExperiment);
-    std::println("# Info: Experiments per core pair: {}", targetExperiments);
+    std::println("# Info: Core count: {}"                , int(totalCores));
+    std::println("# Info: Iterations per experiment: {}" , iterationsPerExperiment);
+    std::println("# Info: Experiments per core pair: {}" , targetExperiments);
 
-    std::println("# Info: Clock: {}", CLOCK_NAME);
-    std::println("# Info: Clock period: {:.0f}ns", CLOCK_PERIOD_NS);
+    std::println("# Info: Clock: {}"                     , CLOCK_NAME);
+    std::println("# Info: Clock period: {:.0f}ns"        , CLOCK_PERIOD_NS);
     std::println("# Info: Clock query overhead: {:.0f}ns", clockOverhead());
 
     Experiments experiments(totalCores);
