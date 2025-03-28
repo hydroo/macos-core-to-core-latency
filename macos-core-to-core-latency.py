@@ -24,11 +24,11 @@ def cpuNameAndCoreCount():
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('csvFile')
+    parser.add_argument('logFile')
     parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
 
-    plotFilename = os.path.splitext(args.csvFile)[0]+'.png'
+    plotFilename = os.path.splitext(args.logFile)[0]+'.png'
 
     cpuName, coreCount = cpuNameAndCoreCount()
     #cpuName = "Apple M2 Pro" # override cpu name in case you run this on a different box
@@ -42,7 +42,7 @@ if __name__ == '__main__':
         print('CPU: N/A')
 
     df0 = pd.read_csv(
-        args.csvFile,
+        args.logFile,
         names = ['fromIndex', 'toIndex', 'fromCore', 'toCore', 'fromCoreLatencyNs', 'toCoreLatencyNs', 'coreLatencyDeltaNs', 'fromCoreFrequencyBeforeGhz', 'fromCoreFrequencyAfterGhz', 'fromCoreFrequencyDeltaGhz', 'toCoreFrequencyBeforeGhz', 'toCoreFrequencyAfterGhz', 'toCoreFrequencyDeltaGhz'],
         converters={
             'fromCore'                   : lambda x: "{:5}".format(int(x)),
