@@ -9,6 +9,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <memory>
 #include <print>
 #include <shared_mutex>
 #include <thread>
