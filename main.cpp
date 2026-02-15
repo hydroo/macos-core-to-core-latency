@@ -379,6 +379,15 @@ int main(int argc, char **args) {
 
     std::println("# Info: Total time: {:.2f} s", totalTimeSeconds);
 
+    int totalValidExperiments = 0;
+    int totalExperiments = 0;
+    for (const auto& experiment : experiments.v) {
+        totalValidExperiments += experiment->validResults;
+        totalExperiments      += experiment->validResults + experiment->invalidResults;
+    }
+
+    std::println("# Info: Successful experiments: {:7} / {:7} ({:.2f}%)", totalValidExperiments, totalExperiments, totalExperiments > 0 ? (100.0 * totalValidExperiments / totalExperiments) : 0.0);
+
     return 0;
 }
 
