@@ -43,6 +43,12 @@ Alternatively you can look at the logs directly.
 
 # Results
 
+## Apple M5 (10C)
+
+Cores 0, 1, 2, 3, 4, 5 are E-cores, the others are P-cores.
+
+![Apple M5 (10C) Core-to-Core Latency](results/260312-0-m5-steady_clock-i-2000-r-300.png?raw=true "Apple M5 (10C) Core-to-Core Latency")
+
 ## Apple M4 Max (16C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
