@@ -1,0 +1,13 @@
+CPU: Apple A18 Pro (6C)
+Num cores: 6
+Samples per core pair: min: 300 avg: 300.0 max: 300
+Median Core-to-core latency (ns):
+toCore    0   1   2   3 4100 4101
+fromCore                   
+  0    NaN  21  21  21  109  118
+  1    21  NaN  21  22  115  118
+  2    21  21  NaN  21  110  118
+  3    21  21  21  NaN  115  119
+4100    130  108  131  129  NaN  31
+4101    117  127  117  119  31  NaN
+Stored plot to results.png
