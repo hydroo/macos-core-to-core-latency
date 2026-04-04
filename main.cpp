@@ -1,6 +1,7 @@
 #include <mach/mach.h>
 #include <mach/thread_act.h>
 #include <pthread.h>
+#include <sys/sysctl.h>
 
 #include <algorithm>
 #include <atomic>
@@ -11,11 +12,13 @@
 #include <map>
 #include <memory>
 #include <print>
+#include <string>
 #include <shared_mutex>
 #include <thread>
 #include <utility>
 #include <vector>
 
+std::string socNameAndCoreCount();
 uint64_t currentCore();
 uint64_t currentTimer();
 double   currentTimerPeriodNs();
@@ -338,6 +341,7 @@ int main(int argc, char **args) {
         }
     }
 
+    std::println("# Info: SoC: {}"                       , socNameAndCoreCount());
     std::println("# Info: Core count: {}"                , int(totalCores));
     std::println("# Info: Iterations per experiment: {}" , iterationsPerExperiment);
     std::println("# Info: Experiments per core pair: {}" , targetExperiments);
@@ -441,6 +445,25 @@ std::string Cores::dump(std::string indent) {
 }
 
 // /// Misc ///////////////////////////////////////////////////////////////////
+std::string socNameAndCoreCount() {
+    char socNameBuffer[256];
+    size_t socNameBufferLength = sizeof(socNameBuffer);
+    if (sysctlbyname("machdep.cpu.brand_string", socNameBuffer, &socNameBufferLength, nullptr, 0) != 0) {
+        return std::string("N/A");
+    }
+    if (socNameBufferLength >= sizeof(socNameBuffer)) {
+        socNameBuffer[sizeof(socNameBuffer) - 1] = '\0';
+    }
+
+    int coreCount = -1;
+    size_t size = sizeof(coreCount);
+    if (sysctlbyname("hw.physicalcpu", &coreCount, &size, nullptr, 0) != 0) {
+        coreCount = -1;
+    }
+
+    return std::format("{} ({}C)", socNameBuffer, coreCount != -1 ? std::to_string(coreCount) : "N/A ");
+}
+
 #define SREG_READ(SR)               \
     __asm__ volatile(               \
         "isb \r\n "                 \

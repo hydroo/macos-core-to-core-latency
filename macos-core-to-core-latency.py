@@ -4,48 +4,27 @@ from matplotlib import pyplot as plt
 import numpy as np
 import os
 import pandas as pd
-import subprocess
-
-def cpuNameAndCoreCount():
-    cpuName, coreCount = None, None
-
-    result = subprocess.run(['system_profiler', 'SPHardwareDataType'], capture_output=True, text=True)
-    output = result.stdout
-    
-    for line in output.splitlines():
-        if 'Chip:' in line:
-            cpuName = line.replace('Chip:', '').strip()
-        elif 'Total Number of Cores:' in line:
-            coreCount_ = line.replace('Total Number of Cores:', '')
-            coreCount  = coreCount_[:coreCount_.find('(')].strip()
-
-    return cpuName, coreCount
 
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('logFile')
-    parser.add_argument('-v', '--verbose'  , action='store_true')
-    parser.add_argument('-n', '--cpu-name' , help='cpu name override')
-    parser.add_argument('-c', '--cpu-cores', help='cpu core count override')
+    parser.add_argument('logFileName')
+    parser.add_argument('-v', '--verbose', action='store_true')
     args = parser.parse_args()
 
-    plotFilename = os.path.splitext(args.logFile)[0]+'.png'
+    plotFilename = os.path.splitext(args.logFileName)[0]+'.png'
 
-    cpuName, cpuCores = cpuNameAndCoreCount()
-    if args.cpu_name:
-        cpuName = args.cpu_name
-        cpuCores = args.cpu_cores
-    if cpuName:
-        if cpuCores: cpuString = f'{cpuName} ({cpuCores}C)'
-        else        : cpuString = f'{cpuName}'
-        print('CPU:', cpuString)
-    else:
-        cpuString = None
-        print('CPU: N/A')
+    socNameAndCoreCount = None
+    with open(args.logFileName, 'r') as logFile:
+        for line in logFile:
+            if line.startswith('# Info: SoC:'):
+                socNameAndCoreCount = line.rsplit(':', 1)[1].strip()
+                break
+
+    print('SoC:', socNameAndCoreCount)
 
     df0 = pd.read_csv(
-        args.logFile,
+        args.logFileName,
         names = ['fromIndex', 'toIndex', 'fromCore', 'toCore', 'fromCoreLatencyNs', 'toCoreLatencyNs', 'fromCoreFrequencyBeforeGhz', 'fromCoreFrequencyAfterGhz', 'toCoreFrequencyBeforeGhz', 'toCoreFrequencyAfterGhz'],
         converters={
             'fromCore'                   : lambda x: "{:5}".format(int(x)),
@@ -67,7 +46,7 @@ if __name__ == '__main__':
     coreCount = len(df0['fromCore'].unique())
     coreIndices = list(range(0, coreCount))
 
-    print("Num cores:", coreCount)
+    print("Core count:", coreCount)
 
     df1 = df0.groupby(['fromCore', 'toCore']).agg({
         'toCoreLatencyNs' : [
@@ -106,7 +85,7 @@ if __name__ == '__main__':
     hm = ax.matshow(df3)
     hm.get_cmap().set_bad(color='gray')
 
-    cpuStringForTitle = cpuString + ' ' if cpuString else ''
+    socNameAndCoreCountForTitle = socNameAndCoreCount + ' ' if socNameAndCoreCount else ''
     fontsize = 9 if maxCell >= 100 else 10
     isnan = np.isnan(df3)
     blackAt = (minCell+3*maxCell)/4
@@ -125,7 +104,7 @@ if __name__ == '__main__':
 
     ax.set_xticks(ticks=coreIndices, labels=coreIds, rotation=45)
     ax.set_yticks(ticks=coreIndices, labels=coreIds)
-    ax.set_title(f'{cpuStringForTitle}Core-to-Core Latency (ns)')
+    ax.set_title(f'{socNameAndCoreCountForTitle}Core-to-Core Latency (ns)')
     ax.tick_params(bottom=False)
 
     cb = ax.figure.colorbar(hm, ax=ax, fraction=0.046, pad=0.04)
