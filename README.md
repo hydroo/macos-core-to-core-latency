@@ -10,8 +10,8 @@ cmake --build .
 sudo nice -n -20 ./macos-core-to-core-latency > results.log
 # sudo nice -n -20 ./macos-core-to-core-latency -r 10 > results.log # shorter test run
 
-python3 -m venv path/to/venv
-source path/to/venv/bin/activate
+python3 -m venv myenv
+source myenv/bin/activate
 python3 -m pip install -r requirements.txt
 
 python3 ./macos-core-to-core-latency.py results.log
