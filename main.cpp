@@ -436,8 +436,6 @@ uint64_t Cores::indexToCore(std::size_t index) {
     } else {
         return std::numeric_limits<uint64_t>::max();
     }
-
-
 }
 
 std::string Cores::dump(std::string indent) {
