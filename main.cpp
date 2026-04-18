@@ -11,6 +11,7 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <new>
 #include <print>
 #include <string>
 #include <shared_mutex>
@@ -49,8 +50,7 @@ constexpr int divideByTwoBecausePingPong    = 2;
 int targetExperiments                       = 300;
 constexpr int validExperimentStreakMax      = 10;
 
-std::atomic<std::size_t> totalCores = std::numeric_limits<std::size_t>::max();
-std::atomic<bool>        allDone    = false;
+std::atomic<bool> allDone = false;
 
 struct Experiments {
 
@@ -137,9 +137,16 @@ struct Experiments {
 };
 
 struct Cores {
-    std::vector<uint64_t>           i2c;
-    std::map<uint64_t, std::size_t> c2i;
-    std::shared_mutex               sm;
+    std::size_t                                   totalCores;
+    std::size_t                                   foundCores;
+    std::vector<uint64_t>                         i2c;
+    std::vector<std::pair<uint64_t, std::size_t>> c2i;
+    alignas(std::hardware_destructive_interference_size) std::shared_mutex sm;
+
+    Cores(size_t totalCores_) : totalCores(totalCores_), foundCores(0), i2c(), c2i() {
+        i2c.reserve(totalCores_);
+        c2i.reserve(totalCores_);
+    }
 
     std::pair<uint64_t, std::size_t> currentCoreAndIndex();
     uint64_t indexToCore(std::size_t index);
@@ -320,10 +327,10 @@ void f(std::size_t threadId, Experiments& experiments, Cores& cores) {
 
 int main(int argc, char **args) {
 
-    Cores cores;
-
-    totalCores = (std::size_t) std::thread::hardware_concurrency();
+    std::size_t totalCores = (std::size_t) std::thread::hardware_concurrency();
     //totalCores = 4; // testing
+
+    Cores cores(totalCores);
 
     auto helpText = "macos-core-to-core-latency [-r,--runs num]";
 
@@ -398,43 +405,58 @@ int main(int argc, char **args) {
 // /// Cores //////////////////////////////////////////////////////////////////
 
 std::pair<uint64_t, std::size_t> Cores::currentCoreAndIndex() {
+    decltype(currentCoreAndIndex()) ret = {std::numeric_limits<uint64_t>::max(), std::numeric_limits<std::size_t>::max()};
+    auto retIt = std::end(c2i);
+
     uint64_t core = currentCore();
-    
-    std::shared_lock sl(sm);
-    auto knownCore = c2i.contains(core);
-    sl.unlock();
 
-    std::size_t index;
-
-    if (knownCore) {
-        index = c2i.at(core);
-    } else {
-        std::unique_lock ul(sm);
-        if (c2i.contains(core)) { // Note: need to double check because of a possible race-condition between the shared lock and here
-            index = c2i.at(core);
-        } else {
-            if (i2c.size() == totalCores) {
-                std::println("# Warning: There are more physical cores than expected. Will only test the first {}.", totalCores.load());
-            }
-
-            index = i2c.size();
-            std::println("# Info: New core: {}, index {:2}", core, index);
-
-            i2c.push_back(core);
-            c2i[core] = index;
-            ul.unlock();
-        }
+    if (foundCores == totalCores) {
+        retIt = std::lower_bound(std::begin(c2i), std::end(c2i), core, [](const auto& p, uint64_t core) { return p.first < core; });
+        ret = *retIt;
     }
 
-    return std::make_pair(core, index);
+    if (retIt == std::end(c2i) || retIt->first != core) {
+        std::shared_lock sl(sm);
+        retIt = std::lower_bound(std::begin(c2i), std::end(c2i), core, [](const auto& p, uint64_t core) { return p.first < core; });
+        ret = *retIt; // this is needed to avoid the race if we would assign later
+        sl.unlock();
+
+        if (retIt == std::end(c2i) || retIt->first != core) {
+            std::unique_lock ul(sm);
+            retIt = std::lower_bound(std::begin(c2i), std::end(c2i), core, [](const auto& p, uint64_t core) { return p.first < core; });
+            ret = *retIt;
+            if (retIt == std::end(c2i) || retIt->first != core) { // Note: need to double check because of a possible race-condition between the shared lock and here
+                if (foundCores == totalCores) {
+                    totalCores++;
+                    std::println("# Warning: There are more physical cores than expected. Will only test the first {}.", totalCores);
+                }
+
+                std::size_t index = foundCores;
+                ret = {core, index};
+                std::println("# Info: New core: {}, index {:2}", core, index);
+
+                i2c.push_back(core);
+                c2i.insert(retIt, ret);
+                foundCores += 1;
+
+                ul.unlock();
+            }
+        } // definitely no else ret = here
+    }
+
+    return ret;
 }
 
 uint64_t Cores::indexToCore(std::size_t index) {
-    std::shared_lock sl(sm);
-    if (index < i2c.size()) {
+    if (foundCores == totalCores) {
         return i2c[index];
     } else {
-        return std::numeric_limits<uint64_t>::max();
+        std::shared_lock sl(sm);
+        if (index < i2c.size()) {
+            return i2c[index];
+        } else {
+            return std::numeric_limits<uint64_t>::max();
+        }
     }
 }
 
