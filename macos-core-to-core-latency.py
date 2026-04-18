@@ -58,7 +58,8 @@ if __name__ == '__main__':
             'median',
             ('75%', lambda x:x.quantile(0.75)),
             ('95%', lambda x:x.quantile(0.95)),
-            'max']
+            'max',
+            ('variance', 'var')]
     }).round(2)
 
     print("Samples per core pair: min:", df1['toCoreLatencyNs']['count'].min(), "avg:", df1['toCoreLatencyNs']['count'].mean(), "max:", df1['toCoreLatencyNs']['count'].max())
@@ -67,6 +68,10 @@ if __name__ == '__main__':
         with pd.option_context('display.max_rows', None, 'display.max_columns', None, 'display.width', None):
             print("Detailed Core-to-core latency aggregates (ns):")
             print(df1)
+            print()
+
+            varianceMinMeanMax = df1['toCoreLatencyNs']['variance'].agg(['min', 'median', 'mean', 'max']).round(2).to_dict()
+            print("Latency variance:", ", ".join([f"{k}: {v}" for k, v in varianceMinMeanMax.items()]))
             print()
 
     df2 = df1.reset_index()
