@@ -137,8 +137,8 @@ struct Experiments {
 };
 
 struct Cores {
-    std::size_t                                   totalCores;
-    std::size_t                                   foundCores;
+    std::atomic<std::size_t>                      totalCores;
+    std::atomic<std::size_t>                      foundCores;
     std::vector<uint64_t>                         i2c;
     std::vector<std::pair<uint64_t, std::size_t>> c2i;
     alignas(std::hardware_destructive_interference_size) std::shared_mutex sm;
@@ -330,7 +330,7 @@ int main(int argc, char **args) {
     std::size_t totalCores = (std::size_t) std::thread::hardware_concurrency();
     //totalCores = 4; // testing
 
-    Cores cores(totalCores);
+    alignas(std::hardware_destructive_interference_size) Cores cores(totalCores);
 
     auto helpText = "macos-core-to-core-latency [-r,--runs num]";
 
@@ -410,7 +410,7 @@ std::pair<uint64_t, std::size_t> Cores::currentCoreAndIndex() {
 
     uint64_t core = currentCore();
 
-    if (foundCores == totalCores) {
+    if (foundCores.load(std::memory_order::acquire) == totalCores.load(std::memory_order::acquire)) {
         retIt = std::lower_bound(std::begin(c2i), std::end(c2i), core, [](const auto& p, uint64_t core) { return p.first < core; });
         ret = *retIt;
     }
@@ -426,18 +426,18 @@ std::pair<uint64_t, std::size_t> Cores::currentCoreAndIndex() {
             retIt = std::lower_bound(std::begin(c2i), std::end(c2i), core, [](const auto& p, uint64_t core) { return p.first < core; });
             ret = *retIt;
             if (retIt == std::end(c2i) || retIt->first != core) { // Note: need to double check because of a possible race-condition between the shared lock and here
-                if (foundCores == totalCores) {
-                    totalCores++;
-                    std::println("# Warning: There are more physical cores than expected. Will only test the first {}.", totalCores);
+                if (foundCores.load(std::memory_order::acquire) == totalCores.load(std::memory_order::acquire)) {
+                    totalCores.fetch_add(1, std::memory_order::acq_rel);
+                    std::println("# Warning: There are more physical cores than expected. Will only test the first {}.", totalCores.load(std::memory_order::acquire));
                 }
 
-                std::size_t index = foundCores;
+                std::size_t index = foundCores.load(std::memory_order::acquire);
                 ret = {core, index};
                 std::println("# Info: New core: {}, index {:2}", core, index);
 
                 i2c.push_back(core);
                 c2i.insert(retIt, ret);
-                foundCores += 1;
+                foundCores.fetch_add(1, std::memory_order::acq_rel);
 
                 ul.unlock();
             }
@@ -448,7 +448,7 @@ std::pair<uint64_t, std::size_t> Cores::currentCoreAndIndex() {
 }
 
 uint64_t Cores::indexToCore(std::size_t index) {
-    if (foundCores == totalCores) {
+    if (foundCores.load(std::memory_order::acquire) == totalCores.load(std::memory_order::acquire)) {
         return i2c[index];
     } else {
         std::shared_lock sl(sm);
