@@ -77,7 +77,7 @@ Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
-![Apple M4 Pro (12C) Core-to-Core Latency](results/241204-0-m4pro-cntvct_el0-i-2000-r-300.png?raw=true "Apple M2 Pro (12C) Core-to-Core Latency")
+![Apple M4 Pro (12C) Core-to-Core Latency](results/241204-0-m4pro-cntvct_el0-i-2000-r-300.png?raw=true "Apple M4 Pro (12C) Core-to-Core Latency")
 
 ## Apple M3 Max (16C)
 
