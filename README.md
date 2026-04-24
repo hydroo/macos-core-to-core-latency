@@ -43,6 +43,12 @@ Alternatively you can look at the logs directly.
 
 # Results
 
+## Apple M5 Pro (15C)
+
+Cores 0, 1, 2, 3, 4, 4101, 4102, 4103, 4104, 4105 are likely performance cores, the others are super-cores.
+
+![Apple M5 Pro (15C) Core-to-Core Latency](results/260420-0-m5pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M5 Pro (15C) Core-to-Core Latency")
+
 ## Apple M5 (10C)
 
 Cores 0, 1, 2, 3, 4, 5 are E-cores, the others are P-cores.
@@ -61,6 +67,12 @@ Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M4 Max (16C) Core-to-Core Latency](results/241208-1-m4max-steady_clock-i-2000-r-300.png?raw=true "Apple M4 Max (16C) Core-to-Core Latency")
 
+## Apple M4 Pro (14C)
+
+Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
+
+![Apple M4 Pro (14C) Core-to-Core Latency](results/260420-0-m4pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M4 Pro (14C) Core-to-Core Latency")
+
 ## Apple M4 Pro (12C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
@@ -72,6 +84,12 @@ Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M2 Pro (10C) Core-to-Core Latency](results/241212-0-m3max.png?raw=true "Apple M3 Max (16C) Core-to-Core Latency")
+
+## Apple M3 Pro (12C)
+
+Cores 0, 1, 2, 3, 4, 5 are E-cores, the others are P-cores.
+
+![Apple M3 Pro (12C) Core-to-Core Latency](results/260420-0-m3pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M3 Pro (12C) Core-to-Core Latency")
 
 ## Apple M2 Ultra (24C) (Preliminary)
 
