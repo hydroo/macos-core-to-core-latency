@@ -348,6 +348,7 @@ int main(int argc, char **args) {
         }
     }
 
+    std::println("# Info: Date: {}"                      , std::format("{:%F}", std::chrono::floor<std::chrono::days>(std::chrono::system_clock::now())));
     std::println("# Info: SoC: {}"                       , socNameAndCoreCount());
     std::println("# Info: Core count: {}"                , int(totalCores));
     std::println("# Info: Iterations per experiment: {}" , iterationsPerExperiment);
