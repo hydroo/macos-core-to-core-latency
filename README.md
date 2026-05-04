@@ -3,9 +3,9 @@
 ```
 brew install python3
 
-mkdir BUILD-release
-cd BUILD-release
-cmake .. -DCMAKE_BUILD_TYPE=Release
+mkdir BUILD
+cd BUILD
+cmake ..
 cmake --build .
 sudo nice -n -20 ./macos-core-to-core-latency > results.log
 # sudo nice -n -20 ./macos-core-to-core-latency -r 10 > results.log # shorter test run
