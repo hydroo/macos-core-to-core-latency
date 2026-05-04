@@ -1,3 +1,6 @@
+# Copyright 2024-2026 Ronny Brendel
+# SPDX-License-Identifier: MIT
+
 cmake_minimum_required(VERSION 3.20)
 project(macos-core-to-core-latency)
 enable_language(CXX)

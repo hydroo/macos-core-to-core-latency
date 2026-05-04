@@ -1,4 +1,6 @@
-# How to Run
+# Apple MacOS CPU Core-to-Core Latency
+
+## How to Run
 
 ```
 brew install python3
@@ -20,7 +22,7 @@ deactivate
 open results.png
 ```
 
-# Tuning
+## Tuning
 
 The benchmark is sensitive to CPU core frequencies.
 Therefore, connect your device to power to avoid power throttling.
@@ -41,71 +43,75 @@ constexpr bool optionEstimateFrequency = true;
 `macos-core-to-core-latency.py` has the `-v` option to print out more statistics about the measurement.
 Alternatively you can look at the logs directly.
 
-# Results
+## Results
 
-## Apple M5 Pro (15C)
+### Apple M5 Pro (15C)
 
 Cores 0, 1, 2, 3, 4, 4101, 4102, 4103, 4104, 4105 are likely performance cores, the others are super-cores.
 
 ![Apple M5 Pro (15C) Core-to-Core Latency](results/260420-0-m5pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M5 Pro (15C) Core-to-Core Latency")
 
-## Apple M5 (10C)
+### Apple M5 (10C)
 
 Cores 0, 1, 2, 3, 4, 5 are E-cores, the others are P-cores.
 
 ![Apple M5 (10C) Core-to-Core Latency](results/260312-0-m5-steady_clock-i-2000-r-300.png?raw=true "Apple M5 (10C) Core-to-Core Latency")
 
-## Apple A18 Pro (6C)
+### Apple A18 Pro (6C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple A18 Pro (6C) Core-to-Core Latency](results/260315-0-a18pro-steady_clock-i-2000-r-300-results.png?raw=true "Apple A18 Pro (6C) Core-to-Core Latency")
 
-## Apple M4 Max (16C)
+### Apple M4 Max (16C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M4 Max (16C) Core-to-Core Latency](results/241208-1-m4max-steady_clock-i-2000-r-300.png?raw=true "Apple M4 Max (16C) Core-to-Core Latency")
 
-## Apple M4 Pro (14C)
+### Apple M4 Pro (14C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M4 Pro (14C) Core-to-Core Latency](results/260420-0-m4pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M4 Pro (14C) Core-to-Core Latency")
 
-## Apple M4 Pro (12C)
+### Apple M4 Pro (12C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M4 Pro (12C) Core-to-Core Latency](results/241204-0-m4pro-cntvct_el0-i-2000-r-300.png?raw=true "Apple M4 Pro (12C) Core-to-Core Latency")
 
-## Apple M3 Max (16C)
+### Apple M3 Max (16C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M2 Pro (10C) Core-to-Core Latency](results/241212-0-m3max.png?raw=true "Apple M3 Max (16C) Core-to-Core Latency")
 
-## Apple M3 Pro (12C)
+### Apple M3 Pro (12C)
 
 Cores 0, 1, 2, 3, 4, 5 are E-cores, the others are P-cores.
 
 ![Apple M3 Pro (12C) Core-to-Core Latency](results/260420-0-m3pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M3 Pro (12C) Core-to-Core Latency")
 
-## Apple M2 Ultra (24C) (Preliminary)
+### Apple M2 Ultra (24C) (Preliminary)
 
 The measurement in PR #3 [took almost a day](https://x.com/ivanfioravanti/status/1866945123973468526), and is not very stable.
 Most likely the ~minimum of each cluster is the true latency of the whole cluster.
 
 ![Apple M2 Ultra (24C) Core-to-Core Latency](results/241211-1-m2ultra-steady_clock-i-2000-r-300.png?raw=true "Apple M2 Ultra (24C) Core-to-Core Latency")
 
-## Apple M2 Pro (10C)
+### Apple M2 Pro (10C)
 
 Cores 0, 1, 2, 3 are E-cores, the others are P-cores.
 
 ![Apple M2 Pro (10C) Core-to-Core Latency](results/241204-1-m2pro-steady_clock-i-2000-r-300.png?raw=true "Apple M2 Pro (10C) Core-to-Core Latency")
 
-## Apple M1 Pro (10C)
+### Apple M1 Pro (10C)
 
 Cores 0, 1 are E-cores, the others are P-cores.
 
 ![Apple M1 Pro (10C) Core-to-Core Latency](results/241207-1-m1pro-steady-clock-i-2000-r-300.png?raw=true "Apple M1 Pro (10C) Core-to-Core Latency")
+
+## License
+
+This software is licensed under the MIT license. See the [LICENSE](LICENSE) file for details.

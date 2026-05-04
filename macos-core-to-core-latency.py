@@ -1,3 +1,6 @@
+# Copyright 2024-2026 Ronny Brendel
+# SPDX-License-Identifier: MIT
+
 import argparse
 import math
 from matplotlib import pyplot as plt

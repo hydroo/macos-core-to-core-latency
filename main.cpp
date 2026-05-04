@@ -1,3 +1,6 @@
+// Copyright 2024-2026 Ronny Brendel
+// SPDX-License-Identifier: MIT
+
 #include <mach/mach.h>
 #include <mach/thread_act.h>
 #include <pthread.h>
