@@ -64,17 +64,17 @@ struct Experiments {
         int validResults;
         int invalidResults;
 
-        std::atomic<bool> toCoreFound;
-        std::atomic<bool> fromCoreFound;
-
-        std::atomic<double> fromCoreFrequencyBeforeGHz, fromCoreFrequencyAfterGHz;
-        std::barrier<>      beforeBarrier;
-        std::atomic<bool>   bounce;
-        std::atomic<bool>   fromCoreDidNotChange;
-        std::atomic<bool>   toCoreDidNotChange;
-        std::atomic<double> fromCoreNanoSecondsPerIteration;
-        std::barrier<>      afterBarrier;
-        std::barrier<>      afterStreakBarrier;
+        alignas(std::hardware_destructive_interference_size) std::atomic<bool>   toCoreFound;
+        alignas(std::hardware_destructive_interference_size) std::atomic<bool>   fromCoreFound;
+        alignas(std::hardware_destructive_interference_size) std::atomic<double> fromCoreFrequencyBeforeGHz;
+        alignas(std::hardware_destructive_interference_size) std::atomic<double> fromCoreFrequencyAfterGHz;
+        alignas(std::hardware_destructive_interference_size) std::barrier<>      beforeBarrier;
+        alignas(std::hardware_destructive_interference_size) std::atomic<bool>   bounce;
+        alignas(std::hardware_destructive_interference_size) std::atomic<bool>   fromCoreDidNotChange;
+        alignas(std::hardware_destructive_interference_size) std::atomic<bool>   toCoreDidNotChange;
+        alignas(std::hardware_destructive_interference_size) std::atomic<double> fromCoreNanoSecondsPerIteration;
+        alignas(std::hardware_destructive_interference_size) std::barrier<>      afterBarrier;
+        alignas(std::hardware_destructive_interference_size) std::barrier<>      afterStreakBarrier;
 
         Experiment(std::size_t fromCoreIndex_, std::size_t toCoreIndex_) :
             fromCoreIndex(fromCoreIndex_),
@@ -107,12 +107,12 @@ struct Experiments {
     };
 
     std::vector<std::shared_ptr<Experiment>> v; // Note: shared_ptr is a workaround for construction of atomic, barrier, ...
-    std::shared_mutex sm;
+    alignas(std::hardware_destructive_interference_size) std::shared_mutex sm;
 
-    std::barrier<> b1;
-    std::barrier<> b2;
-    std::barrier<> b3;
-    std::barrier<> b4;
+    alignas(std::hardware_destructive_interference_size) std::barrier<> b1;
+    alignas(std::hardware_destructive_interference_size) std::barrier<> b2;
+    alignas(std::hardware_destructive_interference_size) std::barrier<> b3;
+    alignas(std::hardware_destructive_interference_size) std::barrier<> b4;
 
 
     Experiments(std::size_t totalCores_) :
