@@ -112,14 +112,12 @@ struct Experiments {
     std::barrier<> b1;
     std::barrier<> b2;
     std::barrier<> b3;
-    std::barrier<> b4;
 
 
     Experiments(std::size_t totalCores_) :
         b1(totalCores_),
         b2(totalCores_),
-        b3(totalCores_),
-        b4(totalCores_)
+        b3(totalCores_)
     {
         std::unique_lock ul(sm);
 
@@ -166,8 +164,10 @@ void f(std::size_t threadId, Experiments& experiments, Cores& cores) {
     uint64_t experimentsStarted    = 0;
     uint64_t experimentsNotStarted = 0;
 
-    while (allDone.load(std::memory_order::acquire) == false) {
+    while (true) {
         experiments.b1.arrive_and_wait();
+
+        if (allDone.load(std::memory_order::acquire) == true) { break; }
 
         auto [core, coreIndex] = cores.currentCoreAndIndex();
         //std::println(std::cerr, "t {:2}, coreIndex {:2}, core {:5}", threadId, coreIndex, core);
@@ -323,8 +323,6 @@ void f(std::size_t threadId, Experiments& experiments, Cores& cores) {
         } else {
             dummyWorkload(dummyWorkloadLoopLength);
         }
-
-        experiments.b4.arrive_and_wait();
     }
 }
 
