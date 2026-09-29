@@ -47,7 +47,7 @@ Alternatively you can look at the logs directly.
 
 ### Apple M5 Pro (15C)
 
-Cores 0, 1, 2, 3, 4, 4101, 4102, 4103, 4104, 4105 are likely performance cores, the others are super-cores.
+Cores 0, 1, 2, 3, 4, 4101, 4102, 4103, 4104, 4105 are likely P-cores, the others are S-cores.
 
 ![Apple M5 Pro (15C) Core-to-Core Latency](results/260420-0-m5pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M5 Pro (15C) Core-to-Core Latency")
 
