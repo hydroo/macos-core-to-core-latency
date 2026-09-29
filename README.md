@@ -45,9 +45,15 @@ Alternatively you can look at the logs directly.
 
 ## Results
 
+### Apple M6 (12C) (Preliminary)
+
+Cores 0, 1, 2, 3, 4, 5 are E-cores, 4102, 4103 are likely S-cores, others are likely P-cores.
+
+![Apple M6 (12C) Core-to-Core Latency](results/260929-0-m6-steady_clock-i-2000-r-300-results.png?raw=true "Apple M6 (12C) Core-to-Core Latency")
+
 ### Apple M5 Pro (15C)
 
-Cores 0, 1, 2, 3, 4, 4101, 4102, 4103, 4104, 4105 are likely P-cores, the others are S-cores.
+Cores 0, 1, 2, 3, 4, 4101, 4102, 4103, 4104, 4105 are likely P-cores, the others are likely S-cores.
 
 ![Apple M5 Pro (15C) Core-to-Core Latency](results/260420-0-m5pro-steady_clock-i-200-r-300-results.png?raw=true "Apple M5 Pro (15C) Core-to-Core Latency")
 
